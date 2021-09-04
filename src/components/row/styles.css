@@ -1,0 +1,9 @@
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+.SPACE {
+  width: 12em;
+  border-radius: 15px;
+}
