@@ -1,55 +1,83 @@
-import React, {useLayoutEffect, useState, useRef} from 'react'
+import React, {useLayoutEffect, useState} from 'react'
 import Keyboard from './components/keyboard/keyboard';
 import "./App.css"
 
 let paragraphs = {
     title: "Physics",
     content: "Physics is the natural science that studies matter, its motion and behavior through space and time, and the related entities of energy and force.",
-    maxTime: 10,
+    maxTime: 10000,
     level: "EASY"
   }
 
-let arrayContent = paragraphs.content.replace(/[,.]/g, "").split("")
+let arrayContentWords = paragraphs.content.replace(/[,.]/g, "").split(" ")
+let maxTime = paragraphs.maxTime
+let intervalTime = 100
+
+let steps = 100 / (maxTime/intervalTime)
 
 function App() {
 
-  const [turn, nextTurn] = useState({letter: null, position: -1})
+  const [arrayOfWords, setArrayOfWords] = useState(arrayContentWords)
+  const [word, updateWord] = useState("")
+  const [timeOut, setTimeout] = useState(false)
   const [score, updateScore] = useState(0)
 
-  let first = useRef(true)
 
   useLayoutEffect(() => {
-    if(first.current){
-      first.current = false;
-      return
-    }
+      let bar = document.querySelector(".bar")
+      bar.style.width = "0%"
+      let intervalID = setInterval(() => {
+        bar.style.width = parseInt(bar.style.width.replace("%", "")) + steps + "%"
+        if(bar.style.width === "100%"){
+          clearInterval(intervalID)
+          setTimeout(true)
+          document.querySelector("#keyboard").style.opacity = 0.3
+          document.querySelector(".paragraph").style.opacity = 0.3
+        }
+      }, intervalTime)
+  }, [])
 
-    console.log("L:",arrayContent[turn["position"]]);
-
-    if(arrayContent[turn["position"]].toLowerCase() === turn['letter']){
-      let letterPos = document.querySelector(`#char-${turn['position']}`)
-      letterPos.style.color = '#FFFF00'
-      updateScore(prev => (prev+1))
-    }
-
-
-  }, [turn])
 
   const handleCallbackLetter = (letter) => {
-    nextTurn((prev) => ({...prev, letter: letter, position: prev.position + 1}))
+    if(!timeOut){
+      if(letter !== 'Enter'){
+        updateWord(prev => prev+letter)
+      } else {
+        let arrIndex = arrayOfWords.findIndex((arrWord) => {
+          return arrWord.trim() === word
+        })
+        if(arrIndex >= 0){
+          let newArray = [...arrayOfWords]
+          newArray.splice(arrIndex, 1)
+          setArrayOfWords(newArray)
+          updateScore(prev => prev + word.length)
+        }
+        updateWord("")
+      }
+    } 
   }
 
   return (
     <div className="App">
+      <div className="timer">
+          <div className="bar"></div>
+      </div>
+      {timeOut && (
+          <span className="timeout">
+            <span>Time's up</span>
+            <span>{score}</span>
+          </span>
+      )}
       <div className="paragraph">
           {
-            arrayContent.map((char, index) => {
-              return <span className="char" id={`char-${index}`} key={index}>{char}</span>
+            arrayOfWords.map((char, index) => {
+              return <span className="char" id={`char-${index}`} key={index}>{`${char} `}</span>
             })
           }
       </div>
       <div className="score">
-          {score}
+          <div>{score}</div>
+          <div style={{height: "1em"}}>{word}</div>
       </div>
       <Keyboard callback={handleCallbackLetter} />
     </div>

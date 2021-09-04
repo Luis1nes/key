@@ -1,6 +1,5 @@
 import React, {useLayoutEffect} from 'react'
 import Row from '../row/row'
-import Letter from '../letter/letter'
 import './styles.css'
 
 let letters = {
@@ -15,27 +14,19 @@ const Keyboard = ({callback}) => {
         let reg = /^[a-zA-Z]$/i
         let keyboard = document.querySelector('#keyboard')
         document.onkeydown = function(e) {
-            if(reg.test(e.key) || e.code === "Space"){
-                let key;
-                if(e.code === "Space"){
-                    key = keyboard.querySelector(`.SPACE`)
-                } else {
-                    key = keyboard.querySelector(`.${e.key.toUpperCase()}`)
-                }
+            if(reg.test(e.key)){
+                let key = keyboard.querySelector(`.${e.key.toUpperCase()}`)
                 key.style.color = 'black'
                 key.style.backgroundColor = "white"
                 callback(e.key)
+            } else if(e.code === "Enter"){
+                callback(e.code)
             }
         }
 
         document.onkeyup = function(e){
-            if(reg.test(e.key) || e.code === "Space"){
-                let key;
-                if(e.code === "Space"){
-                    key = keyboard.querySelector(`.SPACE`)
-                } else {
-                    key = keyboard.querySelector(`.${e.key.toUpperCase()}`)
-                }
+            if(reg.test(e.key)){
+                let key = keyboard.querySelector(`.${e.key.toUpperCase()}`)
                 key.style.color = 'white'
                 key.style.backgroundColor = "black"
             }
@@ -51,7 +42,6 @@ const Keyboard = ({callback}) => {
             return <Row key={index} letters={letters[key]} />
             })
         }
-        <Letter letter={"SPACE"} />
         </div>
     )
 }
