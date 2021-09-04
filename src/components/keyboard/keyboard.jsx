@@ -9,7 +9,7 @@ let letters = {
     thirdRow: ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
 }
 
-const Keyboard = () => {
+const Keyboard = ({callback}) => {
 
     useLayoutEffect(() => {
         let reg = /^[a-zA-Z]$/i
@@ -24,6 +24,7 @@ const Keyboard = () => {
                 }
                 key.style.color = 'black'
                 key.style.backgroundColor = "white"
+                callback(e.key)
             }
         }
 
@@ -40,7 +41,7 @@ const Keyboard = () => {
             }
         }
 
-    }, [])
+    }, [callback])
 
 
     return (

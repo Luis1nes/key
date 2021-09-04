@@ -1,19 +1,37 @@
-/* .letter {
-  width: 2em;
-  height: 2em;
-  box-sizing: border-box;
-  border: 1px solid black;
-  margin: 0.2em;
+.App {
+  min-width: 900px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2em;
-  font-weight: 700;
+  flex-direction: column;
+  align-content: space-around;
+  height: 100vh;
+}
+
+.paragraph {
+  box-sizing: border-box;
+  padding: 2em;
+  width: 90%;
+  margin: 2em auto;
   background-color: black;
   color: white;
-  border-radius: 25%;
-} */
-/* .row {
+  border-radius: 20px;
+}
+
+.paragraph > div {
+  font-size: 2em;
+  text-align: center;
+  line-height: 3rem;
+}
+
+.char {
+  font-size: 2em;
+}
+
+.score {
+  flex-grow: 8;
   display: flex;
   justify-content: center;
-} */
+  align-items: center;
+  font-size: 5em;
+  font-weight: 600;
+  font-family: fantasy;
+}
